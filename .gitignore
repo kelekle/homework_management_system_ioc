@@ -1,0 +1,6 @@
+.idea
+*.iml
+target
+core/target
+db/target
+web/target
