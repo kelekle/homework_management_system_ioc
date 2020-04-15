@@ -4,46 +4,54 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <bean name="databasePool" class="com.kle.code.db.DatabasePool" scope="singleton" lazy-init="true"></bean>
-    <bean name="homework" class="com.kle.code.model.Student" scope="prototype"></bean>
-    <bean name="student" class="com.kle.code.model.Student" scope="prototype"></bean>
-    <bean name="teacher" class="com.kle.code.model.Teacher" scope="prototype"></bean>
-    <bean id="springContextHelper" class="com.kle.code.util.SpringContextUtil" scope="singleton"></bean>
+<!--    <bean id="springContextHelper" class="com.kle.code.util.SpringContextUtil" scope="singleton"></bean>-->
+
+<!--        <bean name="databasePool" class="com.kle.code.db.DatabasePool" scope="singleton" lazy-init="true"></bean>-->
+<!--        <bean name="homework" class="com.kle.code.model.Homework" scope="prototype"></bean>-->
+<!--        <bean name="student" class="com.kle.code.model.Student" scope="prototype"></bean>-->
+<!--        <bean name="teacher" class="com.kle.code.model.Teacher" scope="prototype"></bean>-->
+<!--        <bean id="studentHomeworkDb" class="com.kle.code.db.StudentHomeworkDb"></bean>-->
+<!--        <bean id="studentDb" class="com.kle.code.db.StudentDb"></bean>-->
+<!--        <bean id="homeworkDb" class="com.kle.code.db.HomeworkDb"></bean>-->
+<!--        <bean id="teacherDb" class="com.kle.code.db.TeacherDb"></bean>-->
+
+    <!-- 对模型视图名称的解析，即在模型视图名称添加前后缀(如果最后一个还是表示文件夹,则最后的斜杠不要漏了) 使用JSP-->
+    <!-- 默认的视图解析器 在上边的解析错误时使用 (默认使用html)- -->
+    <bean id="defaultViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/"/><!--设置JSP文件的目录位置-->
+        <property name="suffix" value=".jsp"/>
+        <property name="exposeContextBeansAsAttributes" value="true"/>
+    </bean>
 
     <!--启用spring的一些annotation -->
-<context:annotation-config/>
+    <context:annotation-config/>
 
-<!-- 配置注解驱动 可以将request参数与绑定到controller参数上 -->
-<mvc:annotation-driven/>
+    <!-- 配置注解驱动 可以将request参数与绑定到controller参数上 -->
+    <mvc:annotation-driven/>
 
-<!--静态资源映射-->
-<!--本项目把静态资源放在了webapp的statics目录下，资源映射如下-->
-<mvc:resources mapping="/css/**" location="/static/layui/css/"/>
-<mvc:resources mapping="/js/**" location="/static/layui"/>
-<mvc:resources mapping="/image/**" location="/static/images/"/>
-<mvc:default-servlet-handler />  <!--这句要加上，要不然可能会访问不到静态资源，具体作用自行百度-->
+    <!--静态资源映射-->
+    <!--本项目把静态资源放在了webapp的statics目录下，资源映射如下-->
+    <mvc:resources mapping="/css/**" location="/static/layui/css/"/>
+    <mvc:resources mapping="/js/**" location="/static/layui"/>
+    <mvc:resources mapping="/image/**" location="/static/images/"/>
+    <mvc:default-servlet-handler />  <!--这句要加上，要不然可能会访问不到静态资源，具体作用自行百度-->
 
-<mvc:interceptors>
-    <mvc:interceptor>
-        <mvc:mapping path="/student/*"/>
-        <bean class="com.kle.code.interceptor.StudentInterceptor"/>
-    </mvc:interceptor>
-    <mvc:interceptor>
-        <mvc:mapping path="/teacher/*"/>
-        <bean class="com.kle.code.interceptor.TeacherInterceptor"/>
-    </mvc:interceptor>
-</mvc:interceptors>
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/student/*"/>
+            <bean class="com.kle.code.interceptor.StudentInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/teacher/*"/>
+            <bean class="com.kle.code.interceptor.TeacherInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
-<!-- 对模型视图名称的解析，即在模型视图名称添加前后缀(如果最后一个还是表示文件夹,则最后的斜杠不要漏了) 使用JSP-->
-<!-- 默认的视图解析器 在上边的解析错误时使用 (默认使用html)- -->
-<bean id="defaultViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-    <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-    <property name="prefix" value="/WEB-INF/views/"/><!--设置JSP文件的目录位置-->
-    <property name="suffix" value=".jsp"/>
-    <property name="exposeContextBeansAsAttributes" value="true"/>
-</bean>
-
-<!-- 自动扫描装配 -->
-<context:component-scan base-package="com.kle.code.controller"/>
+    <!-- 自动扫描装配 -->
+    <context:component-scan base-package="com.kle.code.controller"/>
+    <context:component-scan base-package="com.kle.code.model"/>
+    <context:component-scan base-package="com.kle.code.db"/>
+    <context:component-scan base-package="com.kle.code.util"/>
 
 </beans>

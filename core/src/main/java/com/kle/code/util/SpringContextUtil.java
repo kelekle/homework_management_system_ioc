@@ -3,7 +3,15 @@ package com.kle.code.util;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
+/**
+ * 学获取全局上下文的工具类
+ * @author ypb
+ */
+@Component
+@Scope("singleton")
 public class SpringContextUtil implements ApplicationContextAware {
 
     private static ApplicationContext applicationContext;

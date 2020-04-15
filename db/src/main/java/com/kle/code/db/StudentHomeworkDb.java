@@ -1,17 +1,27 @@
 package com.kle.code.db;
 
 import com.kle.code.util.SpringContextUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.Date;
 import java.util.*;
 
+/**
+ * 学生作业相关数据库操作类
+ * @author ypb
+ */
+@Component
 public class StudentHomeworkDb {
 
-    private DatabasePool databasePool;
+    private final DatabasePool databasePool;
 
-    public StudentHomeworkDb(){
-        databasePool = (DatabasePool) SpringContextUtil.getApplicationContext().getBean("databasePool");
+    @Autowired
+    public StudentHomeworkDb(DatabasePool databasePool){
+//        databasePool = (DatabasePool) SpringContextUtil.getApplicationContext().getBean("databasePool");
+        this.databasePool = databasePool;
     }
 
     public Boolean addStudentHomework(String sid, String hid) {

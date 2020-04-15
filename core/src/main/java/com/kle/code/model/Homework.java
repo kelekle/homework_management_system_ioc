@@ -1,7 +1,16 @@
 package com.kle.code.model;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import java.util.Date;
 
+/**
+ * 作业实体类
+ * @author ypb
+ */
+@Component
+@Scope("prototype")
 public class Homework {
 
     private int hid;

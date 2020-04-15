@@ -2,16 +2,25 @@ package com.kle.code.db;
 
 import com.kle.code.model.Teacher;
 import com.kle.code.util.SpringContextUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.Date;
 
+/**
+ * 老师相关数据库操作类
+ * @author ypb
+ */
+@Component
 public class TeacherDb {
 
-    private DatabasePool databasePool;
+    private final DatabasePool databasePool;
 
-    public TeacherDb(){
-        databasePool = (DatabasePool) SpringContextUtil.getApplicationContext().getBean("databasePool");
+    @Autowired
+    public TeacherDb(DatabasePool databasePool){
+//        databasePool = (DatabasePool) SpringContextUtil.getApplicationContext().getBean("databasePool");
+        this.databasePool = databasePool;
     }
 
     public Teacher teacherLogin(String tid, String password) {

@@ -12,7 +12,7 @@
 %>
 <html>
 <head>
-    <title>布置作业</title>
+    <title>编辑作业</title>
     <link rel="stylesheet" href="../../static/layui/css/layui.css">
     <style>
         body{margin: 10px;}
@@ -49,7 +49,7 @@
         <button type="button" class="layui-btn" data-type="getid">完成</button>
     </div>
 </form>
-
+</div>
 <script src="../../static/layui/layui.all.js"></script>
 <script>
     layui.use(['jquery','table'], function(){
@@ -93,7 +93,7 @@
                     //请求成功时处理
                     if(data.status === 'success') {
                         layer.msg("成功修改作业！");
-                        setTimeout("location.href='/teacherHomework?tid=<%=tid%>'", 1200);
+                        setTimeout("location.href='/teacher/teacherHomework?tid=<%=tid%>'", 1200);
                     }else {
                         layer.alert("修改作业失败！");
                     }
@@ -109,6 +109,5 @@
         return str === '' || str === undefined || str == null;
     }
 </script>
-
 </body>
 </html>

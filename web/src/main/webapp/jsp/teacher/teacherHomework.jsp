@@ -113,7 +113,7 @@
                         data:{
                             "hid": data.hid
                         },
-                        responseType: "json ",
+                        responseType: "json",
                         success:function(data){
                             console.log(data);
                             //请求成功时处理

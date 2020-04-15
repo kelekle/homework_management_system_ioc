@@ -2,18 +2,28 @@ package com.kle.code.db;
 
 import com.kle.code.model.Student;
 import com.kle.code.util.SpringContextUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 学生相关数据库操作类
+ * @author ypb
+ */
+@Component
 public class StudentDb {
 
-    private DatabasePool databasePool;
+    private final DatabasePool databasePool;
 
-    public StudentDb(){
-        databasePool = (DatabasePool) SpringContextUtil.getApplicationContext().getBean("databasePool");
+    @Autowired
+    public StudentDb(DatabasePool databasePool){
+//        databasePool = (DatabasePool) SpringContextUtil.getApplicationContext().getBean("databasePool");
+        this.databasePool = databasePool;
     }
 
     public Student studentLogin(String sid, String password) {

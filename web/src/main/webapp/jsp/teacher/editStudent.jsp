@@ -69,11 +69,11 @@
 <script>
     <% String msg = (String) request.getAttribute("msg");
        if("success".equals(msg)){%>
-    layer.msg("添加成功,1s后自动跳转至首页！");
+    layer.msg("修改成功,1s后自动跳转至首页！");
     setTimeout("location.href='/teacher/teacherHome'", 1200);
     <%
         } else if("fail".equals(msg)){%>
-    layer.alert("添加失败，请重新添加！！");
+    layer.alert("修改失败，请重新修改！！");
     <%  }
     %>
 </script>

@@ -2,36 +2,46 @@ package com.kle.code.db;
 
 import com.kle.code.model.Homework;
 import com.kle.code.util.SpringContextUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 作业相关数据库操作类
+ * @author ypb
+ */
+@Component
 public class HomeworkDb {
 
-    private DatabasePool databasePool;
+    private final DatabasePool databasePool;
 
-    public HomeworkDb(){
-        databasePool = (DatabasePool) SpringContextUtil.getApplicationContext().getBean("databasePool");
+    @Autowired
+    public HomeworkDb(DatabasePool databasePool){
+//        databasePool = (DatabasePool) SpringContextUtil.getApplicationContext().getBean("databasePool");
+        this.databasePool = databasePool;
     }
 
     public Homework selectHomeworkById(String hid) {
         ResultSet resultSet = null;
         Statement statement = null;
-        String sqlString = "SELECT * FROM homework WHERE tid=" + hid;
+        String sqlString = "SELECT * FROM homework WHERE hid=" + hid;
         try(Connection connection = databasePool.getHikariDataSource().getConnection()){
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sqlString);
-            Homework student = (Homework) SpringContextUtil.getApplicationContext().getBean("homework");
+            Homework homework = (Homework) SpringContextUtil.getApplicationContext().getBean("homework");
             while (resultSet.next()) {
-                student.setHid(Integer.parseInt(hid));
-                student.setTitle(resultSet.getString("title"));
-                student.setContent(resultSet.getString("content"));
-                student.setCreateTime(resultSet.getTimestamp("create_time"));
-                student.setUpdateTime(resultSet.getTimestamp("update_time"));
+                homework.setHid(Integer.parseInt(hid));
+                homework.setTitle(resultSet.getString("title"));
+                homework.setContent(resultSet.getString("content"));
+                homework.setCreateTime(resultSet.getTimestamp("create_time"));
+                homework.setUpdateTime(resultSet.getTimestamp("update_time"));
             }
-            return student;
+            return homework;
         } catch (SQLException e) {
             e.printStackTrace();
         }

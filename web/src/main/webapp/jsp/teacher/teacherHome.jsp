@@ -111,7 +111,7 @@
                         data:{
                           "sid": data.sid
                         },
-                        responseType: "json ",
+                        responseType: "json",
                         success:function(data){
                             //请求成功时处理
                             console.log(data);

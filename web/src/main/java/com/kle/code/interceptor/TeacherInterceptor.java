@@ -7,6 +7,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * 老师身份拦截器
+ * @author ypb
+ */
 public class TeacherInterceptor implements HandlerInterceptor {
 
     @Override

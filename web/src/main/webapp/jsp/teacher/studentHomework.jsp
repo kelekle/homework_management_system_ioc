@@ -40,6 +40,7 @@
     <thead>
     <tr>
         <th lay-data="{field: 'hid', width:100, sort: true, fixed: 'left'}">HID</th>
+        <th lay-data="{field: 'sid', title: 'sid', width:100}"></th>
         <th lay-data="{field: 'title', title: '标题', width:140}"></th>
         <th lay-data="{field: 'content', title: '内容', width: 230}"></th>
         <th lay-data="{field: 'create_time', title: '创建时间', width:180}"></th>
@@ -54,6 +55,7 @@
     %>
     <tr>
         <td><%=studentHomework.get("hid")%></td>
+        <td><%=studentHomework.get("sid")%></td>
         <td><%=studentHomework.get("title")%></td>
         <td><%=studentHomework.get("content")%></td>
         <td><%=studentHomework.get("create_time")%></td>
