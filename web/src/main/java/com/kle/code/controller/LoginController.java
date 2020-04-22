@@ -1,19 +1,15 @@
 package com.kle.code.controller;
 
-import com.kle.code.db.StudentDb;
-import com.kle.code.db.StudentHomeworkDb;
-import com.kle.code.db.TeacherDb;
 import com.kle.code.model.Student;
 import com.kle.code.model.Teacher;
+import com.kle.code.service.impl.StudentServiceImpl;
+import com.kle.code.service.impl.TeacherServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.SpringServletContainerInitializer;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.FrameworkServlet;
 
-import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -31,17 +27,14 @@ import java.util.Map;
 @Controller
 public class LoginController {
 
-    private final StudentDb studentDb;
+    private final StudentServiceImpl studentService;
 
-    private final StudentHomeworkDb studentHomeworkDb;
-
-    private final TeacherDb teacherDb;
+    private final TeacherServiceImpl teacherService;
 
     @Autowired
-    public LoginController(StudentDb studentDb, StudentHomeworkDb studentHomeworkDb, TeacherDb teacherDb) {
-        this.studentDb = studentDb;
-        this.studentHomeworkDb = studentHomeworkDb;
-        this.teacherDb = teacherDb;
+    public LoginController(StudentServiceImpl studentService, TeacherServiceImpl teacherService) {
+        this.studentService = studentService;
+        this.teacherService = teacherService;
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
@@ -66,7 +59,7 @@ public class LoginController {
     @RequestMapping(value = "/studentLogin", method = RequestMethod.POST)
     public void studentLogin(@RequestParam("username") String sid, @RequestParam("password") String password,
                              HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        Student s = studentDb.studentLogin(sid, password);
+        Student s = studentService.login(sid, password);
         if(s != null){
             //使用Cookies对象保存字符串
             Cookie loginStatusCookie = new Cookie("loginStatus", "student_true");
@@ -75,7 +68,7 @@ public class LoginController {
             resp.addCookie(loginStatusCookie);
             resp.addCookie(usernameCookie);
             resp.addCookie(passwordCookie);
-            List<Map<String, String>> list = studentHomeworkDb.getStudentHomeworkOfStudent(sid);
+            List<Map<String, String>> list = studentService.getStudentHomeworkOfStudent(sid);
             req.setAttribute("student", s);
             req.setAttribute("list", list);
             req.getRequestDispatcher(req.getContextPath() + "/jsp/student/studentHome.jsp").forward(req, resp);
@@ -87,7 +80,7 @@ public class LoginController {
     @RequestMapping(value = "/teacherLogin", method = RequestMethod.POST)
     public void teacherLogin(@RequestParam("username") String sid, @RequestParam("password") String password,
                              HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        Teacher s = teacherDb.teacherLogin(sid, password);
+        Teacher s = teacherService.login(sid, password);
         if(s != null){
             //使用Cookies对象保存字符串
             Cookie loginStatusCookie = new Cookie("loginStatus", "teacher_true");
@@ -96,7 +89,7 @@ public class LoginController {
             resp.addCookie(loginStatusCookie);
             resp.addCookie(usernameCookie);
             resp.addCookie(passwordCookie);
-            List<Student> studentList = studentDb.getStudentOfTeacher(sid);
+            List<Student> studentList = teacherService.getStudentOfTeacher(sid);
             req.setAttribute("teacher", s);
             req.setAttribute("student_list", studentList);
             req.getRequestDispatcher(req.getContextPath() + "/jsp/teacher/teacherHome.jsp").forward(req, resp);
@@ -109,7 +102,7 @@ public class LoginController {
     public void teacherRegister(@RequestParam("t_name") String name, @RequestParam("t_password") String password,
                                 HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Date date = new Date();
-        int tid = teacherDb.addTeacher(name, password, date);
+        int tid = teacherService.addTeacher(name, password, date);
         if(tid > 0){
             req.setAttribute("tid", tid);
             req.getRequestDispatcher(req.getContextPath() + "registerSuccess.jsp").forward(req, resp);

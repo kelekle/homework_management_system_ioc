@@ -1,8 +1,7 @@
 package com.kle.code.controller;
 
-import com.kle.code.db.StudentDb;
-import com.kle.code.db.StudentHomeworkDb;
 import com.kle.code.model.Student;
+import com.kle.code.service.impl.StudentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -27,16 +27,12 @@ import java.util.Map;
 @RequestMapping("/student")
 public class StudentController {
 
-    private final StudentDb studentDb;
-
-    private final StudentHomeworkDb studentHomeworkDb;
+    private final StudentServiceImpl studentService;
 
     @Autowired
-    public StudentController(StudentDb studentDb, StudentHomeworkDb studentHomeworkDb) {
-        this.studentDb = studentDb;
-        this.studentHomeworkDb = studentHomeworkDb;
+    public StudentController(StudentServiceImpl studentService) {
+        this.studentService = studentService;
     }
-
 
     @RequestMapping(value = "/studentHome", method = RequestMethod.GET)
     public void studentLogin(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -48,11 +44,11 @@ public class StudentController {
             }
         }
         if (sid != null) {
-            Student s = studentDb.selectStudentById(sid);
+            Student s = studentService.selectStudentById(sid);
             if (s == null) {
                 resp.sendRedirect("index.jsp");
             } else {
-                List<Map<String, String>> list = studentHomeworkDb.getStudentHomeworkOfStudent(sid);
+                List<Map<String, String>> list = studentService.getStudentHomeworkOfStudent(sid);
                 req.setAttribute("student", s);
                 req.setAttribute("list", list);
                 req.getRequestDispatcher(req.getContextPath() + "/jsp/student/studentHome.jsp").forward(req, resp);
@@ -66,7 +62,7 @@ public class StudentController {
     public void submitHomeworkView(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String sid = req.getParameter("sid");
         String hid = req.getParameter("hid");
-        Map<String, String> map = studentHomeworkDb.selectStudentHomeworkById(sid, hid);
+        Map<String, String> map = studentService.selectStudentHomeworkById(sid, hid);
         if(map != null){
             req.setAttribute("studentHomework", map);
             req.getRequestDispatcher(req.getContextPath() + "/jsp/student/submitHomework.jsp").forward(req, resp);
@@ -77,12 +73,12 @@ public class StudentController {
 
     @RequestMapping(value = "/submitHomework", method = RequestMethod.POST)
     public void submitHomework(@RequestParam("sid") String sid, @RequestParam("hid") String hid,
-                                 HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+                                 HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, SQLException {
         String submitContent = req.getParameter("submit_content");
         Date date = new Date();
-        Map<String, String> map = studentHomeworkDb.selectStudentHomeworkById(sid, hid);
+        Map<String, String> map = studentService.selectStudentHomeworkById(sid, hid);
         req.setAttribute("studentHomework", map);
-        if(studentHomeworkDb.submitHomework(sid, hid, submitContent, date)){
+        if(studentService.submitHomework(sid, hid, submitContent, date)){
             req.setAttribute("msg","success");
         }else {
             req.setAttribute("msg","fail");

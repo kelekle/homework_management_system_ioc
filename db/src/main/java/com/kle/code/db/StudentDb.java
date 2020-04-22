@@ -3,7 +3,6 @@ package com.kle.code.db;
 import com.kle.code.model.Student;
 import com.kle.code.util.SpringContextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
@@ -18,36 +17,15 @@ import java.util.List;
 @Component
 public class StudentDb {
 
-    private final DatabasePool databasePool;
+    private final ConnectionUtils connectionUtils;
+
+//    private final DatabasePool databasePool;
 
     @Autowired
-    public StudentDb(DatabasePool databasePool){
+    public StudentDb(ConnectionUtils connectionUtils){
 //        databasePool = (DatabasePool) SpringContextUtil.getApplicationContext().getBean("databasePool");
-        this.databasePool = databasePool;
-    }
-
-    public Student studentLogin(String sid, String password) {
-        String sqlString = "SELECT * FROM student WHERE sid=" + sid;
-        ResultSet resultSet = null;
-        Statement statement = null;
-        try(Connection connection = databasePool.getHikariDataSource().getConnection()){
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(sqlString);
-            while (resultSet.next()){
-                if(resultSet.getString("password").equals(password)){
-                    Student student = (Student) SpringContextUtil.getApplicationContext().getBean("student");
-                    student.setSid(Integer.parseInt(sid));
-                    student.setName(resultSet.getString("name"));
-                    student.setPassword(password);
-                    student.setCreateTime(resultSet.getTimestamp("create_time"));
-                    student.setUpdateTime(resultSet.getTimestamp("update_time"));
-                    return student;
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+//        this.databasePool = databasePool;
+        this.connectionUtils = connectionUtils;
     }
 
     public Boolean addStudent(String tid, String name, String password, Date createTime, Date updateTime) {
@@ -56,7 +34,8 @@ public class StudentDb {
                 "VALUES ('" + name + "', '" + password + "', '" + new Timestamp(createTime.getTime()) +
                 "', '" + new Timestamp(updateTime.getTime()) + "')";
         ResultSet resultSet = null;
-        try(Connection connection = databasePool.getHikariDataSource().getConnection()){
+        try{
+            Connection connection = connectionUtils.getThreadConnection();
             statement = connection.createStatement();
             statement.executeUpdate(addSqlString, Statement.RETURN_GENERATED_KEYS);
             resultSet = statement.getGeneratedKeys();
@@ -77,23 +56,20 @@ public class StudentDb {
         return false;
     }
 
-    public Boolean deleteStudent(String sid) {
-        Statement statement = null;
+    public boolean deleteStudent(String sid) throws SQLException {
         String sqlString = "DELETE FROM student WHERE sid=" + sid;
-        try(Connection connection = databasePool.getHikariDataSource().getConnection()){
-            statement = connection.createStatement();
-            return statement.executeUpdate(sqlString) > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+        Statement statement = null;
+        Connection connection = connectionUtils.getThreadConnection();
+        statement = connection.createStatement();
+        return statement.executeUpdate(sqlString) > 0;
     }
 
     public Student selectStudentById(String sid) {
         ResultSet resultSet = null;
         Statement statement = null;
         String sqlString = "SELECT * FROM student WHERE sid=" + sid;
-        try(Connection connection = databasePool.getHikariDataSource().getConnection()){
+        try{
+            Connection connection = connectionUtils.getThreadConnection();
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sqlString);
             Student student = (Student) SpringContextUtil.getApplicationContext().getBean("student");
@@ -116,7 +92,8 @@ public class StudentDb {
         List<Student> list = new ArrayList<>();
         ResultSet resultSet = null;
         Statement statement = null;
-        try(Connection connection = databasePool.getHikariDataSource().getConnection()){
+        try{
+            Connection connection = connectionUtils.getThreadConnection();
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sqlString);
             while (resultSet.next()){
@@ -135,10 +112,15 @@ public class StudentDb {
     }
 
     public boolean updateStudent(String sid, String name, String password, Date date) {
-        Statement statement = null;
         String sqlString = "UPDATE student SET name='"+ name + "', password='" + password + "', update_time='" +
                 new Timestamp(date.getTime()) + "' " + "WHERE sid=" + sid;
-        try(Connection connection = databasePool.getHikariDataSource().getConnection()){
+        return executeSqlString(sqlString, connectionUtils);
+    }
+
+    public boolean executeSqlString(String sqlString, ConnectionUtils connectionUtils){
+        try {
+            Statement statement = null;
+            Connection connection = connectionUtils.getThreadConnection();
             statement = connection.createStatement();
             return statement.executeUpdate(sqlString) > 0;
         } catch (SQLException e) {

@@ -15,7 +15,6 @@ public class StudentInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        request.setCharacterEncoding("utf-8"); //防止中文乱码
         Cookie[] cookies = request.getCookies();
         String loginStatus = "";
         for (Cookie c : cookies) {

@@ -3,7 +3,6 @@ package com.kle.code.db;
 import com.kle.code.model.Homework;
 import com.kle.code.util.SpringContextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
@@ -18,19 +17,23 @@ import java.util.List;
 @Component
 public class HomeworkDb {
 
-    private final DatabasePool databasePool;
+//    private final DatabasePool databasePool;
+
+    private final ConnectionUtils connectionUtils;
 
     @Autowired
-    public HomeworkDb(DatabasePool databasePool){
+    public HomeworkDb(ConnectionUtils connectionUtils){
 //        databasePool = (DatabasePool) SpringContextUtil.getApplicationContext().getBean("databasePool");
-        this.databasePool = databasePool;
+//        this.databasePool = databasePool;
+        this.connectionUtils = connectionUtils;
     }
 
     public Homework selectHomeworkById(String hid) {
+        String sqlString = "SELECT * FROM homework WHERE hid=" + hid;
         ResultSet resultSet = null;
         Statement statement = null;
-        String sqlString = "SELECT * FROM homework WHERE hid=" + hid;
-        try(Connection connection = databasePool.getHikariDataSource().getConnection()){
+        try{
+            Connection connection = connectionUtils.getThreadConnection();
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sqlString);
             Homework homework = (Homework) SpringContextUtil.getApplicationContext().getBean("homework");
@@ -48,56 +51,41 @@ public class HomeworkDb {
         return null;
     }
 
-    public Homework addHomework(String tid, String title, String content, Date createTime, Date updateTime) {
+    public Homework addHomework(String tid, String title, String content, Date createTime, Date updateTime) throws SQLException{
         String sqlString = "INSERT INTO homework (`tid`, `title`, `content`, `create_time`, `update_time`) " +
                 "VALUES ('" + tid + "', '" + title + "', '" + content + "', '" + new Timestamp(createTime.getTime()) +
                 "', '" + new Timestamp(updateTime.getTime()) + "');";
         ResultSet resultSet = null;
         Statement statement = null;
-        try(Connection connection = databasePool.getHikariDataSource().getConnection()){
-            statement = connection.createStatement();
-            statement.executeUpdate(sqlString, Statement.RETURN_GENERATED_KEYS);
-            resultSet = statement.getGeneratedKeys();
-            int hid = -1;
-            while (resultSet.next()){
-                hid = resultSet.getInt(1);
-            }
-            Homework homework = (Homework) SpringContextUtil.getApplicationContext().getBean("homework");
-            homework.setHid(hid);
-            homework.setTitle(title);
-            homework.setContent(content);
-            homework.setCreateTime(createTime);
-            homework.setUpdateTime(updateTime);
-            return homework;
-        } catch (SQLException e) {
-            e.printStackTrace();
+        Connection connection = connectionUtils.getThreadConnection();
+        statement = connection.createStatement();
+        statement.executeUpdate(sqlString, Statement.RETURN_GENERATED_KEYS);
+        resultSet = statement.getGeneratedKeys();
+        int hid = -1;
+        while (resultSet.next()){
+            hid = resultSet.getInt(1);
         }
-        return null;
+        Homework homework = (Homework) SpringContextUtil.getApplicationContext().getBean("homework");
+        homework.setHid(hid);
+        homework.setTitle(title);
+        homework.setContent(content);
+        homework.setCreateTime(createTime);
+        homework.setUpdateTime(updateTime);
+        return homework;
     }
 
     public boolean updateHomework(String hid, String title, String content, Date date) {
-        Statement statement = null;
         String sqlString = "UPDATE homework SET title='"+ title + "', content='" + content + "', update_time='" +
                 new Timestamp(date.getTime()) + "' " + "WHERE hid=" + hid;
-        try(Connection connection = databasePool.getHikariDataSource().getConnection()){
-            statement = connection.createStatement();
-            return statement.executeUpdate(sqlString) > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+        return executeSqlString(sqlString, connectionUtils);
     }
 
-    public Boolean deleteHomework(String hid) {
+    public boolean deleteHomework(String hid) throws SQLException {
         String sqlString = "DELETE FROM homework WHERE hid=" + hid;
         Statement statement = null;
-        try(Connection connection = databasePool.getHikariDataSource().getConnection()){
-            statement = connection.createStatement();
-            return statement.executeUpdate(sqlString) > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+        Connection connection = connectionUtils.getThreadConnection();
+        statement = connection.createStatement();
+        return statement.executeUpdate(sqlString) > 0;
     }
 
     public List<Homework> getHomeworkOfTeacher(String tid) {
@@ -105,7 +93,8 @@ public class HomeworkDb {
         List<Homework> list = new ArrayList<>();
         ResultSet resultSet = null;
         Statement statement = null;
-        try(Connection connection = databasePool.getHikariDataSource().getConnection()){
+        try{
+            Connection connection = connectionUtils.getThreadConnection();
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sqlString);
             while (resultSet.next()){
@@ -121,6 +110,18 @@ public class HomeworkDb {
             e.printStackTrace();
         }
         return list;
+    }
+
+    public boolean executeSqlString(String sqlString, ConnectionUtils connectionUtils) {
+        try {
+            Statement statement = null;
+            Connection connection = connectionUtils.getThreadConnection();
+            statement = connection.createStatement();
+            return statement.executeUpdate(sqlString) > 0;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

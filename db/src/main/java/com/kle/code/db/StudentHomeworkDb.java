@@ -1,8 +1,6 @@
 package com.kle.code.db;
 
-import com.kle.code.util.SpringContextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
@@ -16,35 +14,44 @@ import java.util.*;
 @Component
 public class StudentHomeworkDb {
 
-    private final DatabasePool databasePool;
+//    private final DatabasePool databasePool;
+
+    private final ConnectionUtils connectionUtils;
 
     @Autowired
-    public StudentHomeworkDb(DatabasePool databasePool){
+    public StudentHomeworkDb(ConnectionUtils connectionUtils){
 //        databasePool = (DatabasePool) SpringContextUtil.getApplicationContext().getBean("databasePool");
-        this.databasePool = databasePool;
+//        this.databasePool = databasePool;
+        this.connectionUtils = connectionUtils;
     }
 
-    public Boolean addStudentHomework(String sid, String hid) {
-        Statement statement = null;
-        try(Connection connection = databasePool.getHikariDataSource().getConnection()){
-            statement = connection.createStatement();
-            String insertSqlString = "INSERT INTO student_homework (sid, hid) VALUES ('" +
-                        sid + "', '" + hid + "')";
-            return statement.executeUpdate(insertSqlString) > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+    public boolean addStudentHomework(String sid, String hid) throws SQLException {
+        String insertSqlString = "INSERT INTO student_homework (sid, hid) VALUES ('" +
+                sid + "', '" + hid + "')";
+        return executeSqlString(insertSqlString, connectionUtils);
+    }
+
+    public boolean deleteStudentHomeworkBySid(String sid) throws SQLException {
+        String insertSqlString = "DELETE FROM student_homework WHERE sid='" + sid + "'";
+        executeSqlString(insertSqlString, connectionUtils);
+        return true;
+    }
+
+    public boolean deleteStudentHomeworkByHid(String hid) throws SQLException {
+        String insertSqlString = "DELETE FROM student_homework WHERE hid='" + hid + "'";
+        executeSqlString(insertSqlString, connectionUtils);
+        return true;
     }
 
     public Boolean submitHomework(String sid, String hid, String submitContent, Date submitTime) {
         String sqlString = "UPDATE student_homework SET `submit_content`='" + submitContent +
                 "', `submit_time`='" + new Timestamp(submitTime.getTime()) + "' WHERE sid=" + sid + " AND hid=" + hid;
-        Statement statement = null;
-        try(Connection connection = databasePool.getHikariDataSource().getConnection()){
+        try {
+            Statement statement = null;
+            Connection connection = connectionUtils.getThreadConnection();
             statement = connection.createStatement();
             return statement.executeUpdate(sqlString) > 0;
-        } catch (SQLException e) {
+        }catch (Exception e){
             e.printStackTrace();
         }
         return false;
@@ -56,7 +63,8 @@ public class StudentHomeworkDb {
         String sqlString = "SELECT title, content, create_time, update_time, submit_content, submit_time " +
                 "FROM student_homework, homework WHERE sid=" + sid + " AND student_homework.hid=" + hid + " " +
                 "AND homework.hid=" + hid;
-        try(Connection connection = databasePool.getHikariDataSource().getConnection()){
+        try{
+            Connection connection = connectionUtils.getThreadConnection();
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sqlString);
             Map<String, String> map = new HashMap<String,String>();
@@ -91,7 +99,8 @@ public class StudentHomeworkDb {
         String sqlString = "SELECT sid, title, content, create_time, update_time, submit_content, submit_time " +
                 "FROM homework, student_homework " +
                 "WHERE homework.hid=" + hid + " AND student_homework.hid=" + hid;
-        try(Connection connection = databasePool.getHikariDataSource().getConnection()){
+        try{
+            Connection connection = connectionUtils.getThreadConnection();
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sqlString);
             while (resultSet.next()) {
@@ -128,7 +137,8 @@ public class StudentHomeworkDb {
         List<Map<String, String>> list = new ArrayList<>();
         Statement statement = null;
         ResultSet resultSet = null;
-        try(Connection connection = databasePool.getHikariDataSource().getConnection()){
+        try{
+            Connection connection = connectionUtils.getThreadConnection();
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sqlString);
             while (resultSet.next()){
@@ -156,6 +166,12 @@ public class StudentHomeworkDb {
         return list;
     }
 
+    public boolean executeSqlString(String sqlString, ConnectionUtils connectionUtils) throws SQLException {
+        Statement statement = null;
+        Connection connection = connectionUtils.getThreadConnection();
+        statement = connection.createStatement();
+        return statement.executeUpdate(sqlString) > 0;
+    }
 
 //    public static List<Student> getOtherStudent(String tid) {
 //        Connection connection = DbUtil.getInstance().getConnection();

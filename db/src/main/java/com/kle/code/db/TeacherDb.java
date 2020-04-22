@@ -15,43 +15,23 @@ import java.util.Date;
 @Component
 public class TeacherDb {
 
-    private final DatabasePool databasePool;
+    private final ConnectionUtils connectionUtils;
+
+//    private final DatabasePool databasePool;
 
     @Autowired
-    public TeacherDb(DatabasePool databasePool){
+    public TeacherDb(ConnectionUtils connectionUtils){
 //        databasePool = (DatabasePool) SpringContextUtil.getApplicationContext().getBean("databasePool");
-        this.databasePool = databasePool;
-    }
-
-    public Teacher teacherLogin(String tid, String password) {
-        String sqlString = "SELECT * FROM teacher WHERE tid=" + tid;
-        ResultSet resultSet = null;
-        Statement statement = null;
-        try(Connection connection = databasePool.getHikariDataSource().getConnection()){
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(sqlString);
-            while (resultSet.next()){
-                if(resultSet.getString("password").equals(password)){
-                    Teacher teacher = (Teacher) SpringContextUtil.getApplicationContext().getBean("teacher");
-                    teacher.setTid(Integer.parseInt(tid));
-                    teacher.setName(resultSet.getString("name"));
-                    teacher.setPassword(password);
-                    teacher.setCreateTime(resultSet.getTimestamp("create_time"));
-                    teacher.setUpdateTime(resultSet.getTimestamp("update_time"));
-                    return teacher;
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+//        this.databasePool = databasePool;
+        this.connectionUtils = connectionUtils;
     }
 
     public Teacher selectTeacherById(String tid) {
         ResultSet resultSet = null;
         Statement statement = null;
         String sqlString = "SELECT * FROM teacher WHERE tid=" + tid;
-        try(Connection connection = databasePool.getHikariDataSource().getConnection()){
+        try{
+            Connection connection = connectionUtils.getThreadConnection();
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sqlString);
             Teacher student = (Teacher) SpringContextUtil.getApplicationContext().getBean("teacher");
@@ -73,10 +53,10 @@ public class TeacherDb {
         Statement statement = null;
         ResultSet resultSet = null;
         int tid = -1;
-        try(Connection connection = databasePool.getHikariDataSource().getConnection()){
+        try{
+            Connection connection = connectionUtils.getThreadConnection();
             statement = connection.createStatement();
-            String insertSqlString = "";
-            insertSqlString = "INSERT INTO teacher (name , password, create_time, update_time ) VALUES ('" +
+            String insertSqlString = "INSERT INTO teacher (name , password, create_time, update_time ) VALUES ('" +
                     name + "', '" + password + "', '" + new Timestamp(date.getTime()) + "', '" +
                     new Timestamp(date.getTime()) + "')";
             int i = statement.executeUpdate(insertSqlString, Statement.RETURN_GENERATED_KEYS);
