@@ -9,7 +9,7 @@
 <html>
 <head>
     <title>添加学生</title>
-    <link rel="stylesheet" href="../../static/layui/css/layui.css">
+    <link rel="stylesheet" href="../layui/css/layui.css">
     <style>
         body{overflow: hidden}
         .layui-input{
@@ -25,10 +25,10 @@
 
 <ul class="layui-nav">
     <li class="layui-nav-item">
-        <a href="${pageContext.request.contextPath}/teacher/teacherHome"><img src="../../static/images/back.png" class="layui-nav-img" alt="">返回</a>
+        <a href="${pageContext.request.contextPath}/teacher/teacherHome"><img src="../images/back.png" class="layui-nav-img" alt="">返回</a>
     </li>
     <li class="layui-nav-item">
-        <a href="javascript:;"><img src="../../static/images/default.png" class="layui-nav-img" alt="">我</a>
+        <a href="javascript:;"><img src="../images/default.png" class="layui-nav-img" alt="">我</a>
         <dl class="layui-nav-child">
             <dd><a href="${pageContext.request.contextPath}/logout">退了</a></dd>
         </dl>
@@ -63,7 +63,7 @@
     </form>
 </div>
 
-<script src="../../static/layui/layui.all.js"></script>
+<script src="../layui/layui.all.js"></script>
 <script>
     <% String msg = (String) request.getAttribute("msg");
        if("success".equals(msg)){%>

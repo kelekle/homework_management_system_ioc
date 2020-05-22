@@ -9,14 +9,14 @@
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
+<!--    <listener>-->
+<!--        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>-->
+<!--    </listener>-->
 
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:app-context.xml</param-value>
-    </context-param>
+<!--    <context-param>-->
+<!--        <param-name>contextConfigLocation</param-name>-->
+<!--        <param-value>classpath:app-context.xml</param-value>-->
+<!--    </context-param>-->
 
     <filter>
         <filter-name>characterEncodingFilter</filter-name>
@@ -37,21 +37,21 @@
     </filter-mapping>
 
     <!--配置springmvc DispatcherServlet-->
-    <servlet>
-        <servlet-name>app</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-        <init-param>
-            <!--Sources标注的文件夹下需要新建一个spring文件夹-->
-            <param-name>contextConfigLocation</param-name>
-            <param-value>classpath:app-servlet.xml</param-value>
-        </init-param>
-        <load-on-startup>1</load-on-startup>
-        <async-supported>true</async-supported>
-    </servlet>
+<!--    <servlet>-->
+<!--        <servlet-name>app</servlet-name>-->
+<!--        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>-->
+<!--        <init-param>-->
+<!--            &lt;!&ndash;Sources标注的文件夹下需要新建一个spring文件夹&ndash;&gt;-->
+<!--            <param-name>contextConfigLocation</param-name>-->
+<!--            <param-value>classpath:app-servlet.xml</param-value>-->
+<!--        </init-param>-->
+<!--        <load-on-startup>1</load-on-startup>-->
+<!--        <async-supported>true</async-supported>-->
+<!--    </servlet>-->
 
-    <servlet-mapping>
-        <servlet-name>app</servlet-name>
-        <url-pattern>/</url-pattern>
-    </servlet-mapping>
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>app</servlet-name>-->
+<!--        <url-pattern>/</url-pattern>-->
+<!--    </servlet-mapping>-->
 
 </web-app>

@@ -15,7 +15,7 @@
 <html>
 <head>
     <title>布置作业</title>
-    <link rel="stylesheet" href="../../static/layui/css/layui.css">
+    <link rel="stylesheet" href="../layui/css/layui.css">
     <style>
         body{margin: 10px;}
     </style>
@@ -23,10 +23,10 @@
 <body>
 <ul class="layui-nav">
     <li class="layui-nav-item">
-        <a href="${pageContext.request.contextPath}/teacher/teacherHomework?tid=<%=tid%>"><img src="../../static/images/back.png" class="layui-nav-img" alt="">返回</a>
+        <a href="${pageContext.request.contextPath}/teacher/teacherHomework?tid=<%=tid%>"><img src="../images/back.png" class="layui-nav-img" alt="">返回</a>
     </li>
     <li class="layui-nav-item">
-        <a href="javascript:;"><img src="../../static/images/default.png" class="layui-nav-img" alt="">我</a>
+        <a href="javascript:;"><img src="../images/default.png" class="layui-nav-img" alt="">我</a>
         <dl class="layui-nav-child">
             <dd><a href="${pageContext.request.contextPath}/logout">退了</a></dd>
         </dl>
@@ -80,7 +80,7 @@
     </div>
 </form>
 
-<script src="../../static/layui/layui.all.js"></script>
+<script src="../layui/layui.all.js"></script>
 <script>
     layui.use(['jquery','table'], function(){
         var table = layui.table,

@@ -9,7 +9,7 @@
 <html>
 <head>
     <title>作业提交</title>
-    <link rel="stylesheet" href="../../static/layui/css/layui.css">
+    <link rel="stylesheet" href="../layui/css/layui.css">
     <style>
         body{overflow: hidden}
         .homework{ height:415px;width:800px;padding: 20px; border-style: solid; border-width: 1px; border-color:#9F9F9F; border-radius: 4px;position:absolute;left: 50%; top: 15%; margin:0 0 0 -400px;}
@@ -21,10 +21,10 @@
 
 <ul class="layui-nav">
     <li class="layui-nav-item">
-        <a href="${pageContext.request.contextPath}/student/studentHome"><img src="../../static/images/back.png" class="layui-nav-img" alt="">返回</a>
+        <a href="${pageContext.request.contextPath}/student/studentHome"><img src="../images/back.png" class="layui-nav-img" alt="">返回</a>
     </li>
     <li class="layui-nav-item">
-        <a href="javascript:;"><img src="../../static/images/default.png" class="layui-nav-img" alt="">我</a>
+        <a href="javascript:;"><img src="../images/default.png" class="layui-nav-img" alt="">我</a>
         <dl class="layui-nav-child">
             <dd><a href="${pageContext.request.contextPath}/logout">退了</a></dd>
         </dl>
@@ -65,7 +65,7 @@
     </form>
 </div>
 
-<script src="../../static/layui/layui.all.js"></script>
+<script src="../layui/layui.all.js"></script>
 <script>
     <% String msg = (String) request.getAttribute("msg");
         if("success".equals(msg)){%>

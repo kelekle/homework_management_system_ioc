@@ -14,7 +14,7 @@ import java.sql.SQLException;
  * AOP 实现的事务管理类
  */
 @Aspect
-@Component
+@Component("MyTransactionManager")
 public class TransactionManager {
 
     private final ConnectionUtils connectionUtils;

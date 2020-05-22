@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -35,6 +36,11 @@ public class LoginController {
     public LoginController(StudentServiceImpl studentService, TeacherServiceImpl teacherService) {
         this.studentService = studentService;
         this.teacherService = teacherService;
+    }
+
+    @RequestMapping(value="/test")
+    public String test() {
+        return "test";
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)

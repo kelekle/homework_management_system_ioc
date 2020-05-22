@@ -18,3 +18,11 @@
 2. com.kle.code.aop下的TransactionManager(切点即对应service中的三个方法)，为三个事务添加切点，利用切面对三个事务进行实现:@Before 关闭自动提交 @AfterReturning 正常执行后事务提交 @AfterThrowing 异常后事务回滚
 3. 从之前的controller中提取service层(service.impl包下实现)
 4. 使用ConnectionUtils(db包)利用ThreadLocal获取当前线程的数据库连接用来使用(提交，回滚...)、关闭，方便在TransactionManager获取当前线程数据库连接操作
+
+### 改为springboot项目
+1. 在pom文件中添加springboot相关依赖
+2. 添加application.properties配置文件
+3. 去除web.xml部分配置（包括对app-context, app-servlet的引用以及一些扫描等）
+4. 添加config文件夹，设置springboot中的拦截器、默认路由、跨域配置等
+5. 注：先吐槽下，不得不说springbooot使用jsp是真的费劲，需要添加好多依赖，这些我都在pom加了注释，
+还有springboot的默认静态资源文件位置是在resources下，所以静态文件也得移到相应位置，另外对spring依赖部分做了一些小改进

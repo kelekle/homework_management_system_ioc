@@ -1,5 +1,6 @@
 package com.kle.code.interceptor;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
  * 学生身份拦截器
  * @author ypb
  */
+@Component
 public class StudentInterceptor implements HandlerInterceptor {
 
     @Override

@@ -15,7 +15,7 @@
 <html>
 <head>
     <title><%=student.getName() + "的个人主页"%></title>
-    <link rel="stylesheet" href="../../static/layui/css/layui.css">
+    <link rel="stylesheet" href="../layui/css/layui.css">
     <style>
         body{margin: 10px;}
     </style>
@@ -27,7 +27,7 @@
         <a href="">我的作业</a>
     </li>
     <li class="layui-nav-item">
-        <a href="javascript:;"><img src="../../static/images/default.png" class="layui-nav-img" alt="">我</a>
+        <a href="javascript:;"><img src="../images/default.png" class="layui-nav-img" alt="">我</a>
         <dl class="layui-nav-child" style="z-index: 9999">
             <dd style="z-index: 9999"><a href="${pageContext.request.contextPath}/logout">退了</a></dd>
         </dl>
@@ -92,7 +92,7 @@
     </tbody>
 </table>
 <%--</div>--%>
-<script src="../../static/layui/layui.all.js"></script>
+<script src="../layui/layui.all.js"></script>
 <script>
     layui.use('table', function(){
         var table = layui.table;
