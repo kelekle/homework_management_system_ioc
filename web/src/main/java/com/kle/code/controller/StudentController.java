@@ -76,6 +76,7 @@ public class StudentController {
                                  HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, SQLException {
         String submitContent = req.getParameter("submit_content");
         Date date = new Date();
+        System.out.println(sid + "\n" +hid);
         Map<String, String> map = studentService.selectStudentHomeworkById(sid, hid);
         req.setAttribute("studentHomework", map);
         if(studentService.submitHomework(sid, hid, submitContent, date)){

@@ -108,6 +108,8 @@
                     $.ajax({
                         url: "${pageContext.request.contextPath }/teacher/deleteStudent",
                         type: "get",
+                        traditional: true,
+                        async: true,
                         data:{
                           "sid": data.sid
                         },

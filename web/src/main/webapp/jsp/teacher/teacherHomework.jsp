@@ -110,6 +110,8 @@
                     $.ajax({
                         url: "/teacher/deleteHomework",
                         type: "get",
+                        traditional: true,
+                        async: true,
                         data:{
                             "hid": data.hid
                         },

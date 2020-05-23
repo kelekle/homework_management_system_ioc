@@ -1,5 +1,6 @@
 package com.kle.code.model;
 
+import com.kle.code.model.pk.TeachPK;
 import lombok.Data;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -7,27 +8,16 @@ import org.springframework.stereotype.Component;
 import javax.persistence.*;
 import java.util.Date;
 
-/**
- * 学生实体类
- * @author ypb
- */
 @Component
 @Scope("prototype")
 @Data
 @Entity
-@Table(name = "student")
-public class Student {
+@Table(name = "teach")
+public class Teach {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int sid;
-
-    private String name;
-
-    private String password;
+    @EmbeddedId
+    private TeachPK teachPK;
 
     private Date createTime;
-
-    private Date updateTime;
 
 }

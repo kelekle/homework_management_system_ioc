@@ -24,5 +24,16 @@
 2. 添加application.properties配置文件
 3. 去除web.xml部分配置（包括对app-context, app-servlet的引用以及一些扫描等）
 4. 添加config文件夹，设置springboot中的拦截器、默认路由、跨域配置等
-5. 注：先吐槽下，不得不说springbooot使用jsp是真的费劲，需要添加好多依赖，这些我都在pom加了注释，
-还有springboot的默认静态资源文件位置是在resources下，所以静态文件也得移到相应位置，另外对spring依赖部分做了一些小改进
+5. 注：先吐槽下，不得不说springbooot使用jsp是真的费劲，需要添加好多依赖，这些我都在pom加了注释  
+还有springboot的静态资源文件位置是在默认路径下去查找的 ![可参考此篇博客](https://www.jianshu.com/p/eaae1b9d2b4a)，所以静态文件也得移到相应位置，另外对spring依赖部分做了一些小改进
+
+### 使用jpa操作数据库
+1. 在pom文件中添加springboot以及jpa相关依赖
+2. web模块下添加mapper_jpa文件夹，通过继承jpaRepository实现相关操作，并使用@Query完成其余操作，使用了分页
+3. model下新建了pk文件夹主要放置复合主键
+4. 将所有db模块的操作替换为jpa操作
+5. 使用lombok简化代码
+7. 注：因为是jpa操作，之前的aop无法获取到对应connection，所以把之前的aop事务注释掉
+
+
+

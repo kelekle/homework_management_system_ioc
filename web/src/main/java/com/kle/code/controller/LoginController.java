@@ -6,10 +6,7 @@ import com.kle.code.service.impl.StudentServiceImpl;
 import com.kle.code.service.impl.TeacherServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -39,8 +36,11 @@ public class LoginController {
     }
 
     @RequestMapping(value="/test")
-    public String test() {
-        return "test";
+    @ResponseBody
+    public Object test(HttpServletRequest req) {
+        int page = Integer.parseInt(req.getParameter("page"));
+        int size = Integer.parseInt(req.getParameter("size"));
+        return studentService.test(page, size);
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)

@@ -13,8 +13,8 @@ import java.sql.SQLException;
  * @author ypb
  * AOP 实现的事务管理类
  */
-@Aspect
-@Component("MyTransactionManager")
+//@Aspect
+//@Component("MyTransactionManager")
 public class TransactionManager {
 
     private final ConnectionUtils connectionUtils;
