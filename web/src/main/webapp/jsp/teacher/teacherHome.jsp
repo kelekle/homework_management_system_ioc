@@ -1,6 +1,7 @@
 <%@ page import="com.kle.code.model.Student" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.kle.code.model.Teacher" %><%--
+<%@ page import="com.kle.code.model.Teacher" %>
+<%@ page import="java.text.SimpleDateFormat" %><%--
   Created by IntelliJ IDEA.
   User: 风在野
   Date: 2020/3/9
@@ -62,11 +63,11 @@
         for(Student studentHomework:list){
     %>
     <tr>
-        <td><%=studentHomework.getSid()%></td>
+        <td><%=String.valueOf(studentHomework.getSid())%></td>
         <td><%=studentHomework.getName()%></td>
         <td><%=studentHomework.getPassword()%></td>
-        <td><%=studentHomework.getCreateTime()%></td>
-        <td><%=studentHomework.getUpdateTime()%></td>
+        <td><%=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(studentHomework.getCreateTime())%></td>
+        <td><%=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(studentHomework.getUpdateTime())%></td>
     </tr>
     <%
         }
@@ -91,7 +92,7 @@
                 ,data = checkStatus.data; //获取选中的数据
             switch(obj.event){
                 case 'add':
-                    location.href="${pageContext.request.contextPath}/teacher/addStudent?tid=<%=teacher.getTid()%>";
+                    location.href="${pageContext.request.contextPath}/teacher/addStudent?tid=<%=String.valueOf(teacher.getTid())%>";
                     break;
             }
         });

@@ -1,6 +1,7 @@
 <%@ page import="com.kle.code.model.Teacher" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.kle.code.model.Homework" %><%--
+<%@ page import="com.kle.code.model.Homework" %>
+<%@ page import="java.text.SimpleDateFormat" %><%--
   Created by IntelliJ IDEA.
   User: 风在野
   Date: 2020/3/10
@@ -68,8 +69,8 @@
         <td><%=studentHomework.getHid()%></td>
         <td><%=studentHomework.getTitle()%></td>
         <td><%=studentHomework.getContent()%></td>
-        <td><%=studentHomework.getCreateTime()%></td>
-        <td><%=studentHomework.getUpdateTime()%></td>
+        <td><%=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(studentHomework.getCreateTime())%></td>
+        <td><%=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(studentHomework.getUpdateTime())%></td>
     </tr>
     <%
         }

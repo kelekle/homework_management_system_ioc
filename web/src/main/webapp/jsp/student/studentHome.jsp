@@ -106,7 +106,7 @@
             var data = obj.data //获得当前行数据
                 ,layEvent = obj.event; //获得 lay-event 对应的值
             if(layEvent === 'edit'){
-                location.href="/student/submitHomework?hid=" + data.hid + "&sid=<%=student.getSid()%>";
+                location.href="/student/submitHomework?hid=" + data.hid + "&sid=<%=String.valueOf(student.getSid())%>";
             }
         });
     });

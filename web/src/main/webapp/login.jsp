@@ -106,7 +106,7 @@
                         <button class="layui-btn" lay-submit lay-filter="formDemo">登陆</button>
                     </div>
                 </div>
-                <a href="" class="font-set">忘记密码?</a>  <a href="register.jsp" class="font-set">立即注册</a>
+                <a href="" class="font-set">-----></a>  <a href="register.jsp" class="font-set">立即注册</a>
             </form>
         </div>
 

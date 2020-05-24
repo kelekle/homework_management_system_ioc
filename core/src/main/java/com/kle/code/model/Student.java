@@ -4,7 +4,6 @@ import lombok.Data;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -14,12 +13,8 @@ import java.util.Date;
 @Component
 @Scope("prototype")
 @Data
-@Entity
-@Table(name = "student")
 public class Student {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int sid;
 
     private String name;
