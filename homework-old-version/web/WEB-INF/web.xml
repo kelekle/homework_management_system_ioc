@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+    <filter>
+        <filter-name>StudentLoginFilter</filter-name>
+        <filter-class>com.kle.code.filter.StudentLoginFilter</filter-class>
+    </filter>
+
+    <!-- 配置多个映射，哪些请求执行过滤器 -->
+    <filter-mapping>
+        <filter-name>StudentLoginFilter</filter-name>
+        <url-pattern>/student/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>TeacherLoginFilter</filter-name>
+        <filter-class>com.kle.code.filter.TeacherLoginFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>TeacherLoginFilter</filter-name>
+        <url-pattern>/teacher/*</url-pattern>
+    </filter-mapping>
+
+<!--    <filter-mapping>-->
+<!--        <filter-name>TeacherLoginFilter</filter-name>-->
+<!--        <url-pattern>jsp/teacher/*.jsp</url-pattern>-->
+<!--    </filter-mapping>-->
+
+<!--    <filter-mapping>-->
+<!--        <filter-name>StudentLoginFilter</filter-name>-->
+<!--        <url-pattern>jsp/student/*.jsp</url-pattern>-->
+<!--    </filter-mapping>-->
+
+</web-app>

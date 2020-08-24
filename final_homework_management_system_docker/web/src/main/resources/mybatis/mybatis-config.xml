@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!-- mybatis全局设置 -->
+    <settings>
+        <!--使用数据库自增id-->
+        <setting name="useGeneratedKeys" value="true" />
+
+        <setting name="useColumnLabel" value="true" />
+
+        <!-- 开启驼峰命名规范-->
+        <setting name="mapUnderscoreToCamelCase" value="true" />
+    </settings>
+
+    <typeAliases>
+        <!-- 批量别名定义（推荐） -->
+        <!-- package：指定包名称来为该包下的po类声明别名，默认的别名就是类名（首字母大小写都可） -->
+        <package name="com.kle.code.model" />
+    </typeAliases>
+
+    <!-- 配置mybatis的环境信息，与spring整合，该信息由spring来管理 -->
+<!--    <environments default="development">-->
+<!--        <environment id="development">-->
+<!--            &lt;!&ndash; 配置JDBC事务控制，由mybatis进行管理 &ndash;&gt;-->
+<!--            <transactionManager type="JDBC"/>-->
+<!--            &lt;!&ndash; 配置数据源，采用mybatis连接池 &ndash;&gt;-->
+<!--            <dataSource type="POOLED">-->
+<!--                <property name="driver" value="${db.driver}" />-->
+<!--                <property name="url" value="${db.url}" />-->
+<!--                <property name="username" value="${db.username}" />-->
+<!--                <property name="password" value="${db.password}" />-->
+<!--            </dataSource>-->
+<!--        </environment>-->
+<!--    </environments>-->
+
+<!--    <mappers>-->
+<!--        <package name="com.kle.code.dao" />-->
+<!--    </mappers>-->
+
+</configuration>

@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+
+  webapp:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8088:8083
+    volumes:
+      - /vol/development
+    depends_on:
+      - mysql
+    links:
+      - mysql:mysql
+
+  mysql:
+    container_name: mysql-container
+    build:
+      context: ./mysql
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 33068:3306
+    environment:
+      MYSQL_DATABASE: class
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: 123456
+    command: [
+      'mysqld',
+      '--innodb-buffer-pool-size=20M',
+      '--character-set-server=utf8',
+      '--collation-server=utf8_general_ci',
+      '--default-time-zone=+8:00',
+      '--lower-case-table-names=1',
+      '--default-authentication-plugin=mysql_native_password'
+    ]
